@@ -1,0 +1,7 @@
+/build/
+/.vscode/
+/code/.vscode/
+/scratch/
+
+*.bmp
+*.xcf
