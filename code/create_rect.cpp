@@ -117,23 +117,40 @@ main(int argc, char **args)
 			game_offscreen_buffer Buffer;
 			Buffer.Width = SCREEN_WIDTH;
             Buffer.Height = SCREEN_HEIGHT;
-			Buffer.Pitch = SCREEN_WIDTH;
-			Buffer.BytesPerPixel = 4;
-
+            Buffer.BytesPerPixel = 4;
+			Buffer.Pitch = SCREEN_WIDTH*Buffer.BytesPerPixel;
+			
 			screenSurface = SDL_GetWindowSurface(Window);
 			Buffer.Memory = screenSurface->pixels;
+
+            bool32 MoveRight = true;
+            int32 pos = 0;
 			while(!quit) {
 				while(SDL_PollEvent(&e) != 0) { 
 					if(e.type == SDL_QUIT) { 
 						quit = true;
 					}
+                }
 
-					SDL_FillRect( screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
-					
-					DrawRectangle(&Buffer, 30, 90, 30, 90, 0xFF, 0x00, 0x00);
+                SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
+                
+                DrawRectangle(&Buffer, (real32)90+pos, (real32)180+pos, 90, 180, 0.0f, 0.0f, 1.0f);
 
-					SDL_UpdateWindowSurface(Window);
-				}
+                if ((180 + pos) >= SCREEN_WIDTH) {
+                    MoveRight = false;
+                } else if ((180+pos) <= 90){
+                    MoveRight = true;
+                }
+
+                if (MoveRight) {
+                    pos += 5;
+                } else {
+                    pos -= 5;
+                }
+
+                SDL_Delay(16);
+
+                SDL_UpdateWindowSurface(Window);
 			}
 		}
 	}
